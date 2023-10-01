@@ -40,24 +40,25 @@ while True:
 ## Result
 ### Attacker
 On the attacker machine run the code to carry out the SYNC flood attack on the victim machine on `10.9.0.5` with port `23`
-![[Pasted image 20231001111701.png]]
+![](attachments/Pasted%20image%2020231001111701.png)
 ### Number of items in the queue
 We can check the queue size using `netstat -tna | grep SYN_RECV | wc -l`, we have set the queue size to `80` previously and we will get the queue capacity of about 60, which is fully taken up
-![[Pasted image 20231001113509.png]]
+![](attachments/Pasted%20image%2020231001113509.png)
 ### Telnet
 We will then try to `telnet` into the victim machine, using `telnet <IP> <port>` 
 Since the queue is flooded with half open connections, telnet keeps `trying` to reach the host, but it could not get into the queue and hence after a few minute, the telnet request `timed out`
-![[Pasted image 20231001111716.png]]
+![](attachments/Pasted%20image%2020231001111716.png)
 
 # Task 1.3 Enable SYNC Cookie
 Enable SYNC Cookie run `sysctl -w net.ipv4.tcp_syncookies=1` in the victim machine
 ## Attack
-![[Pasted image 20231001111701.png]]
+![](attachments/Pasted%20image%2020231001111701.png)
 ## SYNC received
 on the client side, after enabling, the number of sync request received is significantly more than the actual size of the queue, which mean the queue is not blocked
-![[Pasted image 20231001113814.png]]
+![](attachments/Pasted%20image%2020231001113814.png)
 ## Telnet
-![[Pasted image 20231001113940.png]]
+![](attachments/Pasted%20image%2020231001113940.png)
+![](attachments/Pasted%20image%2020231001113940.png)
 Without significant wait, we are able to connect to the victim host directly
 
 # Task 2: TCP RST Attacks on `telnet` Connection
@@ -83,10 +84,10 @@ You will see the connection being established and soon being terminated by the s
 >[!warning]
 >This attack is carried out under assumption that all the machines are under the same `LAN`
 ## Attacker Output
-![[Pasted image 20231001120950.png]]
+![](attachments/Pasted%20image%2020231001120950.png)
 it is spoofing a packet with flag set to `R` which is the RST flag
 ## Client output
-![[Pasted image 20231001121725.png]]
+![](attachments/Pasted%20image%2020231001121725.png)
 it first connected, but the connection soon being closed
 
 # Task 3: TCP Session hijacking
@@ -116,11 +117,12 @@ sniff(iface='br-c26fa13374f9', filter='tcp and src host 10.9.0.5 and src port 23
 4. reopen the telnet session and `ls` again, you will see a `hello.txt` file in the directory, and run `cat hello.txt` will output `hijack`
 ## Result
 ### Telnet session hanging
-![[Pasted image 20231001160025.png]]
+![](attachments/attachments/Pasted%20image%2020231001160025.png)
+
 ### Running hijack code on the server
-![[Pasted image 20231001160049.png]]
+![](attachments/attachments/Pasted%20image%2020231001160049.png)
 ### Hijack result
-![[Pasted image 20231001160126.png]]
+![](attachments/Pasted%20image%2020231001160126.png)
 
 # Task 4: Reverse Shell
 
@@ -152,14 +154,14 @@ sniff(iface='br-c26fa13374f9', filter='tcp and src host 10.9.0.5 and src port 23
 
 ## Result and observation
 ### Running the telnet client on the attacker machine
-![[Pasted image 20231001161635.png]]
+![](attachments/Pasted%20image%2020231001161635.png)
 ### Connect the client to the victim server
-![[Pasted image 20231001161736.png]]
+![](attachments/Pasted%20image%2020231001161736.png)
 ### Start the reverseShell code
-![[Pasted image 20231001161816.png]]
+![](attachments/Pasted%20image%2020231001161816.png)
 ### Telnet session hanging
-![[Pasted image 20231001161601.png]]
+![](attachments/Pasted%20image%2020231001161601.png)
 ### Gain control to the interactive shell
-![[Pasted image 20231001161834.png]]
+![](attachments/Pasted%20image%2020231001161834.png)
 There will be a connection received on 10.9.0.5 which is the IP of the victim machine
 We now have a interactive shell that we can manipulate to access the content in the victim machine

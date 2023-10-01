@@ -49,7 +49,7 @@ Run `ping 10.9.0.5` to send a `ICMP request` to one of your docker containers in
 This `ICMP` request will then be sniffed by our code that is running in terminal 2
 
 ## Result
-![[Pasted image 20230922143656.png]]
+![](attachments/Pasted%20image%2020230922143656.png)
 We can see that there are two `ICMP` network packets sniffed
 The first request is is a `echo-request` with `src 10.9.0.1` and `dst 10.9.0.5`. This request is what we sent from terminal 3 to the docker container at `10.9.0.5`
 The second request is is a `echo-reply` with `src 10.9.0.5` and `dst 10.9.0.1`. This is a reply that is sent from the docker container at `10.9.0.5` back to the sender
@@ -107,7 +107,7 @@ we then run `docksh 8dd38b71f942` to access the terminal in that docker containe
 In the terminal we run `echo "Test Packet" | nc -n -w1 10.9.0.6 12345 -p 1234 `
 This command send a tcp packet with the message `Test Packet` to `10.9.0.6` and destination port number of `12345`
 ### Result
-![[Pasted image 20230922130113.png]]
+![](attachments/Pasted%20image%2020230922130113.png)
 We can see that the packet being sniffed is a `tcp` packet with `src=10.9.0.5` and `dst=10.9.0.6`, in our code we also specify that the destination port should be `12345` and it is indeed `12345` from the output's `dport` field
 
 ## Subnet
@@ -121,7 +121,7 @@ pkt = sniff(filter=filterSubnet,prn=print_pkt)
 From the code we have, `filterSubnet = 'dst net 128.230.0.0/16'` means that we are interested in all the packets that is `coming` from `128.230.0.0/16` which means that the first `16 bits` are fixed, hence, any packets from `128.230.0.0` to `128.230.255.255` will be sniffed
 We remove the `iface` configuration because the subnet that we are using is not in the docker network.
 Now try `ping 128.230.0.1` you will get the following
-![[Pasted image 20230922154210.png]]
+![](attachments/Pasted%20image%2020230922154210.png)
 We received a `echo-reply` packet from `128.230.0.1` and there is no `echo-request` packet because we only want the packets coming from the subnet `128.230.0.0/16`
 
 # Task 1.2 Spoofing attack
@@ -136,9 +136,9 @@ send(p)
 We are spoofing a `ICMP` request from `10.9.0.100` to `10.9.0.5` using the `ICMP` filter from [task 1.1](#task-11a-sniffing-packets) we can see that the packet sniffed is what we intended to send out
 by changing the `src` in the script, we can change the source address of this `ICMP` packet that we are sending out hence spoofing any arbitrary address
 
-![[Pasted image 20230922155305.png]]
+![](attachments/Pasted%20image%2020230922155305.png)
 Changing `src` to `233.233.233.233` a random ip address gives the follwing result
-![[Pasted image 20230922160123.png]]
+![](attachments/Pasted%20image%2020230922160123.png)
 
 # Task 1.3 Traceroute
 
@@ -186,12 +186,12 @@ The `ICMP type` is referenced [here](https://www.ibm.com/docs/en/qsip/7.4?topic=
 ### Trace route internet
 Run `sudo python3 task1-3.py www.google.com` to get the routing information to `www.google.com`
 #### Result
-![[Pasted image 20230922165324.png]]
+![](attachments/Pasted%20image%2020230922165324.png)
 
 ### Trace route local
 Run `sudo python3 task1-3.py 10.9.0.5` to trace the route to a local machine, which should be completed in one hop
 #### Result
-![[Pasted image 20230922165504.png]]
+![](attachments/Pasted%20image%2020230922165504.png)
 
 # Task 1.4 
 ```python
@@ -219,8 +219,8 @@ carry out the same steps [here](#tcp) to get into a victim machines's shell
 ## Result 
 ### 1.2.3.4
 Running `ping 1.2.3.4` on the victim machine to a non-exisitent host on the internet, no reply should be expected, but since the attacker machine is spoofing a `ICMP` echo reply to every request, the victim machine will received a reply
-![[Pasted image 20230922225524.png]]
-![[Pasted image 20230922225822.png]]
+![](attachments/Pasted%20image%2020230922225524.png)
+![](attachments/Pasted%20image%2020230922225822.png)
 We can see from the second screenshot that the ping command is receiving a reply, but from the attacker
 
 ### 10.9.0.99
@@ -228,9 +228,9 @@ When we attempt to ping an IP address in the LAN, the system first tries to reso
 After some time, if the MAC address c`annot be resolved` via ARP, the system understands that it `cannot send the ICMP echo request` to the intended destination, as it doesn't know the hardware (MAC) address of the destination. As a result, it generates an `ICMP error` message indicating that the destination host is unreachable.
 Since the networking stack does not know where to send the `ICMP request`, nothing is sent and hence, on the attacker side, nothing is received
 
-![[Pasted image 20230922225758.png]]
+![](attachments/Pasted%20image%2020230922225758.png)
 
 ### 8.8.8.8
 This is a known Google DNS server that is alive. In a typical scenario, the victim machine would receive an `echo reply` from 8.8.8.8. However, due to the attacker machine's `spoofed replies`, the victim machine received two replies - one genuine from 8.8.8.8 and one spoofed by the attacker.
-![[Pasted image 20230922230628.png]]
+![](attachments/Pasted%20image%2020230922230628.png)
 From the result we can see that there are `duplicate replies`
