@@ -192,7 +192,7 @@ We can see from the output that after a short while, we have found a cache recor
 
 Now to double validate that our attack works, lets get into the shell of the user machine and run `dig example.com`
 
-![User DNS request](attachments/user-dns-request.png)
+![User DNS request](attachments/user-dns-query.png)
 
 From the output we can tell that the attack is successful as the ip for example.com now is `1.2.3.4` and that is exactly what we want to achieve
 
