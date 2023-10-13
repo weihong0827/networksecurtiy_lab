@@ -69,8 +69,8 @@ int main() {
     // send_dns_response(name, ip_resp, n_resp);
     unsigned short transid = 0;
     for (int i = 0; i < 100; i++) {
-      send_dns_response(ip_resp, n_resp, "199.43.133.53", name, transid);
-      send_dns_response(ip_resp, n_resp, "199.43.135.53", name, transid);
+      send_dns_response(ip_resp, n_resp, "93.184.216.34", name, transid);
+      send_dns_response(ip_resp, n_resp, "93.184.216.34", name, transid);
       transid += 1;
     }
 
