@@ -9,10 +9,9 @@
 #include <linux/udp.h>
 
 static struct nf_hook_ops hook2;
-static struct nf_hook_ops[NF_INET_NUMHOOKS]
+static struct nf_hook_ops nfho[NF_INET_NUMHOOKS]
 
-    unsigned int
-    blockUDP(void *priv, struct sk_buff *skb,
+unsigned int blockUDP(void *priv, struct sk_buff *skb,
              const struct nf_hook_state *state) {
   struct iphdr *iph;
   struct udphdr *udph;
@@ -91,12 +90,15 @@ unsigned int printInfo(void *priv, struct sk_buff *skb,
 
 int registerFilter(void) {
   printk(KERN_INFO "Registering filters.\n");
+  for (int i = 0; i < NF_INET_NUMHOOKS; i++) {
+      nfho[i].hook = printInfo;
+      nfho[i].hooknum = i;
+      nfho[i].pf = PF_INET;
+      nfho[i].priority = NF_IP_PRI_FIRST;
+      
+      nf_register_hook(&nfho[i]);
+  }
 
-  hook1.hook = printInfo;
-  hook1.hooknum = NF_INET_LOCAL_OUT;
-  hook1.pf = PF_INET;
-  hook1.priority = NF_IP_PRI_FIRST;
-  nf_register_net_hook(&init_net, &hook1);
 
   hook2.hook = blockUDP;
   hook2.hooknum = NF_INET_POST_ROUTING;
@@ -109,7 +111,10 @@ int registerFilter(void) {
 
 void removeFilter(void) {
   printk(KERN_INFO "The filters are being removed.\n");
-  nf_unregister_net_hook(&init_net, &hook1);
+
+  for (int i = 0; i < NF_INET_NUMHOOKS; i++) {
+        nf_unregister_hook(&nfho[i]);
+  }
   nf_unregister_net_hook(&init_net, &hook2);
 }
 
