@@ -1,0 +1,1 @@
+cmd_/home/seed/Desktop/networksecurtiy_lab/firewall/Files/kernel_module/hello.mod := { echo  /home/seed/Desktop/networksecurtiy_lab/firewall/Files/kernel_module/hello.o;  echo; } > /home/seed/Desktop/networksecurtiy_lab/firewall/Files/kernel_module/hello.mod

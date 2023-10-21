@@ -1,0 +1,1 @@
+cmd_/home/seed/Desktop/networksecurtiy_lab/firewall/Files/kernel_module/modules.order := {   echo /home/seed/Desktop/networksecurtiy_lab/firewall/Files/kernel_module/hello.ko; :; } | awk '!x[$$0]++' - > /home/seed/Desktop/networksecurtiy_lab/firewall/Files/kernel_module/modules.order
