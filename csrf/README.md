@@ -155,5 +155,8 @@ When making `POST` request not even the `lax-cookie` is sent
 
 ### Answering the Questions
 1.The observed behaviour as as shown above. Cookies are not sent based on the `cross-site` status and the different `HTTP` method. For example, a cross site get requests has permission to send the `lax-cookie` but cross site `POST` request can only send the `normal-cookie`
+
 2.Base on part 1, the different cookies sent to the backend can help the backend to perform some sort of `verification` and `identification`and implement certain restrictions on certain endpoints base on the cookies that they received. For example, if the server wants to restrict access to `edit profile` endpoint then it will require the client to send the `strict-cookie`, but for endpoints that is safe and can be allowed for cross site request, then they only require the `normal-cookie` or `lax-cookie`. Then the backend can determine whether to proceed to the next step depending on the cookies that it receives
+
+
 3. We can make sure that for the endpoints that we do not want malicious attacker to perform CSRF attack to passed the cookie check first. take for example the edit profile attack, the server can check that if a `strict-cookie` and/or `lax-cookie` is passed in the header, if not then drop the request. Where as for the `add-friend` request, the backend can check if `strict-cookie` is passed in the header before adding as friend.
